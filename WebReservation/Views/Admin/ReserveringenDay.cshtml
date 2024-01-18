@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Reservations";
+    Layout = "~/Views/Admin/_Layout.cshtml";
+}
+
+<div class="container row p-0 m-0">
+    <div class="col-6">
+        <h2 class="text-info">Reservations</h2>
+    </div>
+    <div class="col-3 offset-3">
+        <a asp-action="CreateReservation" asp-controller="Admin" class="btn btn-info form-control text-white">
+            Create reservation
+        </a>
+    </div>
+
+    <form asp-action="Day" method="get">
+        <p>
+            Date: <input type="date" name="dateCheck" />
+            <input type="submit" value="Search" class="btn btn-success" />
+        </p>
+    </form>
+</div>

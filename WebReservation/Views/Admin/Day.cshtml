@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Reservations";
+    Layout = "~/Views/Admin/_Layout.cshtml";
+}
+
+<div class="container row p-0 m-0">
+    <div class="col-6">
+        <h2 class="text-info">Reservations</h2>
+    </div>
+    <div class="col-3 offset-3">
+        <a asp-action="CreateReservation" asp-controller="Admin" class="btn btn-info form-control text-white">
+            Create reservation
+        </a>
+    </div>
+
+    <form asp-action="Day" method="get">
+        <p>
+            Datum: <input type="date" name="dateCheck" />
+            <input type="submit" value="Search" class="btn btn-success" />
+        </p>
+    </form>
+
+    <div class="col-12 border p-3">
+        <table id="DT_load" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+            @{
+                var reservations = ViewBag.reservations;
+            }
+            <tbody>
+                @foreach (Choice c in reservations)
+                {
+                    <tr>
+                        <td>@c.Name</td>
+                        <td>@c.Location</td>
+                        <td>@c.DateChoice.ToShortDateString()</td>
+                        <td>
+                            <a href="/Admin/Verwijderen/@c.Id" class="btn btn-danger form-control text-white">Verwijderen</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>

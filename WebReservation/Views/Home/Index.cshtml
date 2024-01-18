@@ -1,0 +1,119 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> signInManager;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@{
+
+    @if (signInManager.IsSignedIn(User))
+    {
+        DateTime beginDay = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+        DateTime endDay = beginDay.AddMonths(1).AddDays(-1);
+        string getDate = beginDay.ToString("dddd");
+        int i = 1;
+
+
+        <h1 class=" text-center">AGENDA - @DateTime.Now.ToString("MMMM").ToUpper()</h1>
+        <hr />
+        <h5 style="background-color: #eee; text-align:center ; margin: auto; width:100%; padding: 0.5px; border-style: none;">
+            &nbsp;Maandag &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dinsdag &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Woensdag &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Donderdag &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Vrijdag &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Zaterdag &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Zondag &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </h5>
+
+        <table class="table table-bordered">
+            <tr>
+                @{
+                    DateTime beginDay2 = beginDay.AddDays(-1);
+                    DayOfWeek endingDay = beginDay.DayOfWeek;
+                    while (beginDay2.DayOfWeek != DayOfWeek.Monday)
+                    {
+                        beginDay2 = beginDay2.AddDays(-1);
+                    }
+                }
+
+                @while (beginDay2.DayOfWeek != beginDay.DayOfWeek)
+                {
+                    <td>
+                        @beginDay2.Day
+                        <a class="event d-block p-2 pl-4 pr-2 mb-1 rounded text-truncate small bg-secondary text-white"></a>
+
+                    </td>
+                    beginDay2 = beginDay2.AddDays(1);
+                    i = i + 1;
+                }
+
+                @{ var reservations = ViewBag.Choices; }
+                @while (beginDay <= endDay)
+                {
+                    int dateNumber = int.Parse(beginDay.ToString("dd"));
+                    getDate = beginDay.ToString("dddd");
+                    if (i == 8)
+                    {
+                        @:</tr><tr>
+                        i = 1;
+                    }
+                    @*if (dateNumber % 7 == 0 && dateNumber > 0)
+                    {
+                    @:</tr><tr>
+                    }*@
+                    <td>
+                        @beginDay.Day
+                        @if (beginDay.DayOfWeek != DayOfWeek.Saturday && beginDay.DayOfWeek != DayOfWeek.Sunday)
+                        {
+                            object afspraak = null;
+                            foreach (Choice c in reservations)
+                            {
+                                if (c.DateChoice.ToString("dd") == dateNumber.ToString())
+                                {
+                                    afspraak = c;
+                                    break;
+                                }
+                                else
+                                    afspraak = null;
+                            }
+
+                            if (afspraak != null)
+                            {
+                                <a class="event d-block p-2 pl-4 pr-2 mb-1 rounded text-truncate small bg-warning"></a>
+                            }
+                            else if (afspraak == null)
+                            {
+                                <a class="event d-block p-2 pl-4 pr-2 mb-1 rounded text-truncate small bg-light text-white"></a>
+                            }
+
+                        }
+                        @if (dateNumber == DateTime.Now.Day)
+                        {
+                            <a class="event d-block p-2 pl-4 pr-2 mb-1 rounded text-truncate small bg-info text-white"></a>
+                        }
+                        @if (beginDay.DayOfWeek == DayOfWeek.Saturday || beginDay.DayOfWeek == DayOfWeek.Sunday)
+                        {
+                            <a class="event d-block p-2 pl-4 pr-2 mb-1 rounded text-truncate small bg-secondary text-white"></a>
+                        }
+                    </td>
+                    beginDay = beginDay.AddDays(1);
+                    i = i + 1;
+                }
+                @{ DateTime endDay2 = endDay.AddDays(1);
+                    string newDays = endDay2.ToString("dddd");
+                }
+
+                @while (endDay2.DayOfWeek != DayOfWeek.Monday)
+                {
+                    <td>
+                        @endDay2.Day
+                        <a class="event d-block p-2 pl-4 pr-2 mb-1 rounded text-truncate small bg-secondary text-white"></a>
+                    </td>
+                    endDay2 = endDay2.AddDays(1);
+                }
+
+        </table>
+        <pre><a class="event p-1 pl-5 pr-2 mb-1 rounded text-truncate small bg-info text-white"></a> = Vandaag        <a class="event p-1 pl-5 pr-2 mb-1 rounded text-truncate small bg-warning"></a> = Reserveringen</pre>
+        <pre><a class="event p-1 pl-5 pr-2 mb-1 rounded text-truncate small bg-light text-white"></a> = Beschikbaar    <a class="event p-1 pl-5 pr-2 mb-1 rounded text-truncate small bg-secondary"></a> = Niet beschikbaar</pre>
+    }
+}
+

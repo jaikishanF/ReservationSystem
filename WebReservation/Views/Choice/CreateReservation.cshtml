@@ -1,0 +1,81 @@
+﻿@model Choice
+
+@{
+    ViewData["Title"] = "Create reservation";
+    string year = DateTime.Today.Year.ToString();
+    string month = DateTime.Today.Month.ToString();
+    string day = DateTime.Today.Day.ToString();
+    string dateBegin = year + '-' + month + '-' + day;
+
+    DateTime beginDay = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+    DateTime endDay = beginDay.AddMonths(1).AddDays(-1);
+    string day2 = endDay.Day.ToString();
+    string dateEnd = year + '-' + month + '-' + day2;
+}
+
+<br />
+<h2 class="text-info">Reservation</h2>
+<hr />
+<br />
+
+<div class="border container" style="padding:30px;">
+    <form method="post">
+
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Name">Name:</label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Name" class="form-control" value="@User.Identity.Name" readonly />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="DateChoice">Date:</label>
+            </div>
+            <div class="col-6">
+                <input asp-for="DateChoice" class="form-control" type="date" min="@dateBegin" max="@dateEnd" value="@DateTime.Today" />
+                <span asp-validation-for="DateChoice" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Location">Location:</label>
+            </div>
+            <div class="col-6">
+                <select asp-for="Location" asp-items="@ViewBag.Locations" class="form-control">
+                    <option value="">-- Choose Location --</option>
+                </select>
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3 offset-3">
+                <button type="submit" class="btn btn-primary form-control">
+                    Reserve
+                </button>
+            </div>
+            <div class="col-3">
+                <a asp-action="Index" class="btn btn-success form-control">Go back</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@if (ViewBag.max != null)
+{
+    <div class="alert alert-danger">
+        <strong>Error!</strong> You already have a reservation for this day!
+    </div>
+    <a asp-action="Index">Back to the reservation list</a>
+}
+
+@if (ViewBag.error != null)
+{
+    <div class="alert alert-danger">
+        <strong>Error!</strong> This location on this date has already been fully booked!
+    </div>
+    <a asp-action="Index">Back to the reservation list</a>
+}

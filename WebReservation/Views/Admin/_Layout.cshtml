@@ -1,0 +1,46 @@
+﻿@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card login-logout-tab">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-items">
+                        <a class="nav-link" asp-action="Reservations" asp-controller="Admin">Reservations</a>
+                    </li>
+                    <li class="nav-items">
+                        <a class="nav-link" asp-action="Users" asp-controller="Admin">Users</a>
+                    </li>
+                    <li class="nav-items">
+                        <a class="nav-link" asp-action="Locations" asp-controller="Admin">Locaties</a>
+                    </li>
+                    <li class="nav-items">
+                        <a class="nav-link" asp-action="ListRole" asp-controller="Administration">Administratie</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-content">
+                <div class="col-md-12">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @RenderSection("Scripts", required: false)
+    <script>
+        $(function () {
+            var current = location.pathname;
+            $('.nav-tabs li a').each(function () {
+                var $this = $(this);
+                if (current.indexOf($this.attr('href')) !== -1) {
+                    $this.addClass('active');
+                }
+            })
+        })
+    </script>
+}

@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Users";
+    Layout = "~/Views/Admin/_Layout.cshtml";
+}
+
+<div class="container row p-0 m-0">
+    <div class="col-6">
+        <h2 class="text-info">Users</h2>
+    </div>
+    <div class="col-3 offset-3">
+        <a asp-area="" asp-controller="Admin" asp-action="UserCreate" class="btn btn-info form-control text-white">
+            Add user
+        </a>
+    </div>
+    <div class="col-12 border p-3">
+        <table id="DT_load" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Phone number</th>
+                    <th></th>
+                </tr>
+            </thead>
+            @{
+                var users = ViewBag.users;
+            }
+            <tbody>
+                @foreach (IdentityUser u in users)
+                {
+                    <tr>
+                        <td>@u.UserName</td>
+                        <td>@u.Email</td>
+                        <td>@u.PhoneNumber</td>
+                        <td>
+                            <a href="/Admin/UserDelete/@u.Id" class="btn btn-danger form-control text-white">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>

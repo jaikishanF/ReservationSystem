@@ -1,0 +1,83 @@
+﻿@model WebReservation.Models.Choice
+
+@{
+    ViewData["Title"] = "Create Reservation";
+    string year = DateTime.Today.Year.ToString();
+    string month = DateTime.Today.Month.ToString();
+    string day = DateTime.Today.Day.ToString();
+    string dateBegin = month + '-' + day + '-' + year;
+
+    DateTime beginDay = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+    DateTime endDay = beginDay.AddMonths(1).AddDays(-1);
+    string day2 = endDay.Day.ToString();
+    string dateEnd = month + '-' + day2 + '-' + year;
+}
+
+<h2 class="text-info"> Reservering</h2>
+<hr />
+<br />
+
+<div class="border container" style="padding:30px;">
+    <form method="post">
+        
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Name">Name:</label>
+            </div>
+            <div class="col-6">
+                <select asp-for="Name" asp-items="@ViewBag.Users" class="form-control">
+                    <option value="">-- Choose Name --</option>
+                </select>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="DateChoice">Date:</label>
+            </div>
+            <div class="col-6">
+                <input asp-for="DateChoice" class="form-control" type="date" min="@dateBegin" max="@dateEnd" value="@DateTime.Today" />
+                <span asp-validation-for="DateChoice" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Location">Location:</label>
+            </div>
+            <div class="col-6">
+                <select asp-for="Location" asp-items="@ViewBag.Locations" class="form-control">
+                    <option value="">-- Kies Locatie --</option>
+                </select>
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="col-3 offset-3">
+                <button type="submit" class="btn btn-primary form-control">
+                    Reservate
+                </button>
+            </div>
+            <div class="col-3">
+                <a asp-action="Reservations" class="btn btn-success form-control">Go back</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@if (ViewBag.error != null)
+{
+    <div class="alert alert-danger">
+        <strong>Error!</strong> This person already has a reservation for this day!
+    </div>
+    <a asp-action="Reservations">Go back</a>
+}
+
+@if (ViewBag.max != null)
+{
+    <div class="alert alert-danger">
+        <strong>Error!</strong> This location has already been fully booked!
+    </div>
+    <a asp-action="Reservations">Go back</a>
+}

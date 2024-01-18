@@ -1,0 +1,45 @@
+﻿@model Building
+@{
+    ViewData["Title"] = "Location";
+    Layout = "~/Views/Admin/_Layout.cshtml";
+}
+
+<div class="container row p-0 m-0">
+    <div class="col-6">
+        <h2 class="text-info">Locations</h2>
+    </div>
+    <div class="col-3 offset-3">
+        <a asp-controller="Admin" asp-action="CreateLocation" class="btn btn-info form-control text-white">
+            Create location
+        </a>
+    </div>
+    <div class="col-12 border p-3">
+        <table id="DT_load" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.Room)</th>
+                    <th>@Html.DisplayNameFor(model => model.Capacity)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            @{
+                var locations = ViewBag.locations;
+            }
+            <tbody>
+                @foreach (Building b in locations)
+                {
+                    <tr>
+                        <td>@b.Name</td>
+                        <td>@b.Room</td>
+                        <td>@b.Capacity</td>
+                        <td>
+                            <a href="/Admin/DeleteLocation/@b.Id" class="btn btn-danger form-control text-white">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
